@@ -33,6 +33,10 @@ function App() {
     filteredProducts.sort((a, b) => b.price - a.price);
   }
 
+  useEffect(() => {
+    document.title = `CvSU Mini Store (${filteredProducts.length} results)`;
+  }, [filteredProducts.length]);
+
   function handleClearFilters() {
     setSearchText('');
     setDebouncedSearch('');
@@ -72,25 +76,35 @@ function App() {
         />
         <div className="section-heading">
           <h2>Our Products</h2>
-          <span>{products.length} products</span>
+          <span role="status">Showing {filteredProducts.length} of {products.length} products</span>
         </div>
-        <section className="product-grid" aria-label="Product catalog">
-          {filteredProducts.map((product) => (
-            <ProductCard
-              key={product.id}
-              title={product.title}
-              price={product.price}
-              category={product.category}
-              inStock={product.inStock}
-              onAddToCart={handleAddToCart}
-            >
-              {product.id === 1 && <span className="badge new">New</span>}
-              {product.id === 2 && <span className="badge sale">Sale</span>}
-            </ProductCard>
-          ))}
-        </section>
+        {filteredProducts.length === 0 ? (
+          <div className="empty-state">
+            <h2>No products found.</h2>
+            <p>Try a different keyword or category.</p>
+            <button className="clear-button" type="button" onClick={handleClearFilters}>
+              Clear Filters
+            </button>
+          </div>
+        ) : (
+          <section className="product-grid" aria-label="Product catalog">
+            {filteredProducts.map((product) => (
+              <ProductCard
+                key={product.id}
+                title={product.title}
+                price={product.price}
+                category={product.category}
+                inStock={product.inStock}
+                onAddToCart={handleAddToCart}
+              >
+                {product.id === 1 && <span className="badge new">New</span>}
+                {product.id === 2 && <span className="badge sale">Sale</span>}
+              </ProductCard>
+            ))}
+          </section>
+        )}
       </main>
-      <footer> CvSU Mini Store · React Props Laboratory Exercise 3 </footer>
+      <footer> CvSU Mini Store · React Live Search Laboratory Exercise 4 </footer>
     </>
   );
 }
