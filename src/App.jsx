@@ -1,11 +1,34 @@
 import "./App.css";
 import { useState } from 'react';
 import ProductCard from './components/ProductCard.jsx';
+import SearchBar from './components/SearchBar.jsx';
 import products from './data/products.js';
 
 function App() {
   const [cartCount, setCartCount] = useState(0);
   const [lastAdded, setLastAdded] = useState('');
+  const [searchText, setSearchText] = useState('');
+  const [category, setCategory] = useState('All');
+  const [sortOrder, setSortOrder] = useState('default');
+
+  // Calculate matching products without changing the original array.
+  const filteredProducts = [...products].filter((product) => {
+    const matchesSearch = product.title.toLowerCase().includes(searchText.trim().toLowerCase());
+    const matchesCategory = category === 'All' || product.category === category;
+    return matchesSearch && matchesCategory;
+  });
+
+  if (sortOrder === 'low-to-high') {
+    filteredProducts.sort((a, b) => a.price - b.price);
+  } else if (sortOrder === 'high-to-low') {
+    filteredProducts.sort((a, b) => b.price - a.price);
+  }
+
+  function handleClearFilters() {
+    setSearchText('');
+    setCategory('All');
+    setSortOrder('default');
+  }
 
   function handleAddToCart(title) {
     setCartCount((previousCount) => previousCount + 1);
@@ -28,12 +51,21 @@ function App() {
             ? 'Your cart is empty.'
             : `Items added to cart: ${cartCount} (Last added: ${lastAdded})`}</p>
         </div>
+        <SearchBar
+          searchText={searchText}
+          category={category}
+          sortOrder={sortOrder}
+          onSearchChange={setSearchText}
+          onCategoryChange={setCategory}
+          onSortChange={setSortOrder}
+          onClearFilters={handleClearFilters}
+        />
         <div className="section-heading">
           <h2>Our Products</h2>
           <span>{products.length} products</span>
         </div>
         <section className="product-grid" aria-label="Product catalog">
-          {products.map((product) => (
+          {filteredProducts.map((product) => (
             <ProductCard
               key={product.id}
               title={product.title}
