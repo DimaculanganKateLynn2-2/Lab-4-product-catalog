@@ -1,3 +1,4 @@
+import "./App.css";
 import { useState } from 'react';
 import ProductCard from './components/ProductCard.jsx';
 import products from './data/products.js';
