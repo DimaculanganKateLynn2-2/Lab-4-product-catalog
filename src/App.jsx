@@ -1,5 +1,5 @@
 import "./App.css";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ProductCard from './components/ProductCard.jsx';
 import SearchBar from './components/SearchBar.jsx';
 import products from './data/products.js';
@@ -8,12 +8,21 @@ function App() {
   const [cartCount, setCartCount] = useState(0);
   const [lastAdded, setLastAdded] = useState('');
   const [searchText, setSearchText] = useState('');
+  const [debouncedSearch, setDebouncedSearch] = useState('');
   const [category, setCategory] = useState('All');
   const [sortOrder, setSortOrder] = useState('default');
 
+  // Wait until typing stops for 300ms before filtering.
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(searchText);
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [searchText]);
+
   // Calculate matching products without changing the original array.
   const filteredProducts = [...products].filter((product) => {
-    const matchesSearch = product.title.toLowerCase().includes(searchText.trim().toLowerCase());
+    const matchesSearch = product.title.toLowerCase().includes(debouncedSearch.trim().toLowerCase());
     const matchesCategory = category === 'All' || product.category === category;
     return matchesSearch && matchesCategory;
   });
@@ -26,6 +35,7 @@ function App() {
 
   function handleClearFilters() {
     setSearchText('');
+    setDebouncedSearch('');
     setCategory('All');
     setSortOrder('default');
   }
