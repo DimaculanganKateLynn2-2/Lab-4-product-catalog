@@ -148,3 +148,45 @@ footer {
   .store-header { padding: 28px 18px; }
   .container { padding: 20px 16px 32px; }
 }
+
+/* Lab 4: controlled search and filter controls */
+.search-bar {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr) minmax(0, 1.2fr) auto;
+  align-items: end;
+  gap: 14px;
+  margin-top: 22px;
+  padding: 18px;
+  background: #fff;
+  border: 1px solid #dbe5dc;
+  border-radius: 12px;
+}
+.filter-field { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.filter-field label { font-size: 13px; font-weight: bold; color: #345443; }
+.filter-field input, .filter-field select {
+  width: 100%; min-width: 0; height: 44px; padding: 9px 10px;
+  border: 1px solid #b9c9bd; border-radius: 7px;
+  background: white; color: #1e293b; font: inherit;
+}
+.clear-button {
+  min-height: 44px; padding: 10px 15px;
+  border: 1px solid #166534; border-radius: 7px;
+  color: #14532d; background: white; font: inherit;
+  font-weight: bold; cursor: pointer;
+}
+.clear-button:hover { background: #e6f2e8; }
+.filter-field input:focus-visible, .filter-field select:focus-visible,
+.clear-button:focus-visible { outline: 3px solid #b7791f; outline-offset: 2px; }
+.empty-state {
+  padding: 48px 20px; text-align: center; background: white;
+  border: 1px dashed #b9c9bd; border-radius: 12px;
+}
+.empty-state h2 { margin: 0 0 10px; font-size: 21px; }
+.empty-state p { color: #52645a; margin: 0 0 20px; }
+@media (max-width: 850px) {
+  .search-bar { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 520px) {
+  .search-bar { grid-template-columns: 1fr; padding: 14px; }
+  .section-heading { flex-wrap: wrap; }
+}
